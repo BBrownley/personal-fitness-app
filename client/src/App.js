@@ -27,7 +27,15 @@ function App() {
     e.preventDefault();
 
     try {
-      await usersService.register(username, email, password, confirmPassword);
+      const res = await usersService.register(
+        username,
+        email,
+        password,
+        confirmPassword
+      );
+      if (res.error) {
+        throw new Error(res.error);
+      }
     } catch (e) {
       setFormErrorMsg(e.message || "Unable to register");
       setTimeout(() => {

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const baseUrl = "http://localhost:9000";
+
 const register = async (username, email, password, confirmPassword) => {
   if (username.trim().length === 0) {
     throw new Error("Username field is empty");
@@ -21,13 +23,18 @@ const register = async (username, email, password, confirmPassword) => {
     throw new Error("Passwords do not match");
   }
 
-  const res = await axios.post("/users", {
-    username,
-    password,
-    email
-  });
+  try {
+    const res = await axios.post(`${baseUrl}/users`, {
+      username,
+      email,
+      password,
+      confirmPassword
+    });
 
-  console.log(res);
+    console.log(res);
+  } catch (err) {
+    return { error: err.message };
+  }
 };
 
 const usersService = { register };
