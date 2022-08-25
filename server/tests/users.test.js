@@ -39,9 +39,43 @@ describe("POST /users", () => {
     );
   });
 
-  test("should return a 401 error if email is invalid", () => {});
+  test("should return a 401 error if email is invalid", done => {
+    const users = usersFixture.userAccsInvalidEmail;
 
-  test("should return a 401 error if passwords do not match", () => {});
+    return async.series(
+      [
+        cb => {
+          request(app)
+            .post("/users")
+            .send(users[0])
+            .expect(401, cb);
+        },
+        cb => {
+          request(app)
+            .post("/users")
+            .send(users[1])
+            .expect(401, cb);
+        }
+      ],
+      done
+    );
+  });
+
+  test("should return a 401 error if passwords do not match", done => {
+    const users = usersFixture.userAccsPasswordsNotMatching;
+
+    return async.series(
+      [
+        cb => {
+          request(app)
+            .post("/users")
+            .send(users[0])
+            .expect(401, cb);
+        }
+      ],
+      done
+    );
+  });
 
   test("should return a 409 error if username is taken", () => {});
 

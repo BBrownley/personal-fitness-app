@@ -19,6 +19,10 @@ const register = async (username, email, password, confirmPassword) => {
     throw new Error("Confirm password field is empty");
   }
 
+  if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.trim())) {
+    throw new Error("Email is invalid");
+  }
+
   if (password !== confirmPassword) {
     throw new Error("Passwords do not match");
   }

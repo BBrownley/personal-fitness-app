@@ -25,12 +25,18 @@ router.post("/", (req, res, next) => {
   if (confirmPassword.trim().length === 0) {
     next(createError(401, "Confirm password field is empty"));
   }
+  // Validate email
 
-  if (password !== confirmPassword) {
-    next(new Error("Passwords do not match"));
+  if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.trim())) {
+    next(createError(401, "Email is invalid"));
   }
 
-  next();
+  // Check if passwords are matching
+
+  if (password !== confirmPassword) {
+    next(createError(401, "Passwords do not match"));
+  }
+
   // Check if username/email is unique
 
   // --- Validation passed, user can be registered --- //
@@ -39,6 +45,8 @@ router.post("/", (req, res, next) => {
 
   // Create user object and store in database
   //res.json(req.body);
+
+  next();
 });
 
 module.exports = router;
