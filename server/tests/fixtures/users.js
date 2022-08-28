@@ -44,6 +44,8 @@ const userAccsInvalidEmail = [
   }
 ];
 
+// for testing not matching passwords
+
 const userAccsPasswordsNotMatching = [
   {
     username: "user1",
@@ -53,8 +55,39 @@ const userAccsPasswordsNotMatching = [
   }
 ];
 
+// for testing duplicate usernames in database
+
+const userAccsDuplicateUsername = [
+  {
+    username: "user1",
+    email: "user1@email.com",
+    password: "123456",
+    confirmPassword: "123456"
+  },
+
+  {
+    username: "user1",
+    email: "user2@email.com",
+    password: "123456",
+    confirmPassword: "123456"
+  }
+];
+
+// account with valid credentials
+
+const userAccsValid = [
+  {
+    username: "user1",
+    email: "user1@email.com",
+    password: "123456",
+    confirmPassword: "123456"
+  }
+];
+
 module.exports = {
   userAccsEmptyField,
   userAccsInvalidEmail,
-  userAccsPasswordsNotMatching
+  userAccsPasswordsNotMatching,
+  userAccsDuplicateUsername,
+  userAccsValid
 };

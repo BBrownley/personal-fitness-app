@@ -26,4 +26,8 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/testAPI", testAPIRouter);
 
+app.use((err, req, res, next) => {
+  res.status(err.status).json({ error: err.message });
+});
+
 module.exports = app;

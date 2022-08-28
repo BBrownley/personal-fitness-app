@@ -3,3 +3,4 @@ mockups (1).drawio
 user-stories-description.txt
 restclient.rest
 node_modules
+server/.env

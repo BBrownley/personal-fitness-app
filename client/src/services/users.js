@@ -28,16 +28,14 @@ const register = async (username, email, password, confirmPassword) => {
   }
 
   try {
-    const res = await axios.post(`${baseUrl}/users`, {
+    await axios.post(`${baseUrl}/users`, {
       username,
       email,
       password,
       confirmPassword
     });
-
-    console.log(res);
   } catch (err) {
-    return { error: err.message };
+    return { error: err.response.data.error };
   }
 };
 
