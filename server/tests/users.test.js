@@ -2,7 +2,40 @@ const request = require("supertest");
 const async = require("async");
 const app = require("../app");
 
+const testDb = require("../database/connection").testDb;
+
 const usersFixture = require("./fixtures/users");
+
+beforeEach(done => {
+  // testDb.connect(async () => {
+  //   // Clear test db tables, re-insert initial data
+
+  //   const truncateQuery = `TRUNCATE users`;
+  //   const insertUserQuery = `
+  //     INSERT INTO users (user_id, user_username, user_email, user_hashed_password)
+  //     VALUES (null, "user2", "user1@email.com", 123456)
+  //   `;
+
+  //   await testDb.query(truncateQuery);
+
+  //   await testDb.query(insertUserQuery, () => {
+  //     done();
+  //   });
+  // });
+
+  const insertUserQuery = `
+      INSERT INTO users (user_id, user_username, user_email, user_hashed_password)
+      VALUES (null, "user2", "user1@email.com", 123456)
+    `;
+
+  testDb.query(insertUserQuery, () => {
+    done();
+  });
+});
+
+afterAll(() => {
+  testDb.end();
+});
 
 describe("POST /users", () => {
   test("should return a 401 error if any registration field is empty", done => {
@@ -77,7 +110,14 @@ describe("POST /users", () => {
     );
   });
 
-  test("should return a 409 error if username is taken", () => {});
+  test("should return a 409 error if username is taken", async () => {
+    const user = usersFixture.userAccsDuplicateUsername[0];
+
+    await request(app)
+      .post("/users")
+      .send(user)
+      .expect(409);
+  });
 
   test("should return a 409 error if email is taken", () => {});
 

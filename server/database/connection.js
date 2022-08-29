@@ -1,15 +1,16 @@
 require("dotenv").config();
 const mysql = require("mysql");
 
-var db = mysql.createConnection({
+var db = mysql.createPool({
   host: "localhost",
   user: "root",
   database: "personal-fitness-app"
 });
 
-db.connect(function(err) {
-  if (err) throw err;
-  console.log("Database connected!");
+var testDb = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  database: "personal-fitness-app-test"
 });
 
-module.exports = { db };
+module.exports = { db, testDb };
