@@ -116,5 +116,31 @@ describe("POST /users", () => {
       .expect(409);
   });
 
-  test("should return status 200 with response containing a token if registration successful", () => {});
+  test("should return status 200 if registration successful", async () => {
+    const user = usersFixture.userAccsValid[0];
+
+    await request(app)
+      .post("/users")
+      .send(user)
+      .expect(200);
+  });
 });
+
+/*
+
+test("should return status 200 with response containing a token if registration successful", async () => {
+    const user = usersFixture.userAccsValid[0];
+
+    const res = await request(app)
+      .post("/users")
+      .send(user)
+      .expect(200);
+
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        token: expect.any(String)
+      })
+    );
+  });
+
+*/

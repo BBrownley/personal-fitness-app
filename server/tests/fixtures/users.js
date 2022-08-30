@@ -81,8 +81,8 @@ const userAccsDuplicateEmail = [
 
 const userAccsValid = [
   {
-    username: "user1",
-    email: "user1@email.com",
+    username: "user200",
+    email: "user200@email.com",
     password: "123456",
     confirmPassword: "123456"
   }

@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const bcrypt = require("bcrypt");
+
 const dbModule = require("../database/connection");
 const db = process.env.NODE_ENV === "test" ? dbModule.testDb : dbModule.db;
 
@@ -43,7 +45,31 @@ const emailAlreadyExists = async email => {
   });
 };
 
+const registerUser = async (username, email, password) => {
+  const insertUserQuery = `
+    INSERT INTO users (user_username, user_email, user_hashed_password)
+    VALUES (?)
+  `;
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const values = [username, email, hashedPassword];
+
+  return new Promise((resolve, reject) => {
+    db.query(insertUserQuery, [values], (err, result) => {
+      console.log(err);
+
+      if (err) {
+        reject();
+      }
+
+      resolve();
+    });
+  });
+};
+
 module.exports = {
   userAlreadyExists,
-  emailAlreadyExists
+  emailAlreadyExists,
+  registerUser
 };

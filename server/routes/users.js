@@ -55,27 +55,13 @@ router.post("/", async (req, res, next) => {
 
   // // --- Validation passed, user can be registered --- //
 
-  // const createUserQuery = `
-  //   INSERT INTO users (user_id, user_username, user_email, user_hashed_password)
-  //   VALUES (?, ?, ?, ?)
-  // `;
+  try {
+    await usersService.registerUser(username, email, password);
+  } catch (err) {
+    return next(createError(500, "Unable to register user"));
+  }
 
-  // db.query(
-  //   createUserQuery,
-  //   [null, username, email, password],
-  //   (err, result) => {
-  //     if (err) throw err;
-  //     console.log(result);
-  //   }
-  // ); // TODO: hash password
-
-  // Hash the password
-
-  // Create user object and store in database
-
-  //res.json(req.body);
-
-  res.status(200).json({ message: "Hello" });
+  res.status(200).json({ message: "User successfully registered" });
 });
 
 module.exports = router;
