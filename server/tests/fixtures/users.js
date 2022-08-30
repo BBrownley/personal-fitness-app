@@ -59,15 +59,8 @@ const userAccsPasswordsNotMatching = [
 
 const userAccsDuplicateUsername = [
   {
-    username: "user1",
+    username: "user14658458",
     email: "user1@email.com",
-    password: "123456",
-    confirmPassword: "123456"
-  },
-
-  {
-    username: "user1",
-    email: "user2@email.com",
     password: "123456",
     confirmPassword: "123456"
   }

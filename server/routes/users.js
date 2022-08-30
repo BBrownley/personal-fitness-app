@@ -43,6 +43,8 @@ router.post("/", async (req, res, next) => {
 
   const userAlreadyExists = await usersService.userAlreadyExists(username);
 
+  console.log(userAlreadyExists);
+
   if (userAlreadyExists) {
     return next(createError(409, "Username is already taken"));
   }
@@ -82,7 +84,7 @@ router.post("/", async (req, res, next) => {
 
   //res.json(req.body);
 
-  res.json({ message: "Hello" });
+  res.status(200).json({ message: "Hello" });
 });
 
 module.exports = router;

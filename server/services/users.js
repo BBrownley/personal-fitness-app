@@ -1,4 +1,7 @@
-const db = require("../database/connection").db;
+require("dotenv").config();
+
+const dbModule = require("../database/connection");
+const db = process.env.NODE_ENV === "test" ? dbModule.testDb : dbModule.db;
 
 const userAlreadyExists = async username => {
   const usernameUniqueQuery = `

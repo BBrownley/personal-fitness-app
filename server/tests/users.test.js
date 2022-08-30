@@ -6,30 +6,18 @@ const testDb = require("../database/connection").testDb;
 
 const usersFixture = require("./fixtures/users");
 
-beforeEach(done => {
-  // testDb.connect(async () => {
-  //   // Clear test db tables, re-insert initial data
-
-  //   const truncateQuery = `TRUNCATE users`;
-  //   const insertUserQuery = `
-  //     INSERT INTO users (user_id, user_username, user_email, user_hashed_password)
-  //     VALUES (null, "user2", "user1@email.com", 123456)
-  //   `;
-
-  //   await testDb.query(truncateQuery);
-
-  //   await testDb.query(insertUserQuery, () => {
-  //     done();
-  //   });
-  // });
+beforeAll(done => {
+  const truncateQuery = `TRUNCATE users`;
 
   const insertUserQuery = `
       INSERT INTO users (user_id, user_username, user_email, user_hashed_password)
-      VALUES (null, "user2", "user1@email.com", 123456)
+      VALUES (null, "user14658458", "user1@email.com", 123456)
     `;
 
-  testDb.query(insertUserQuery, () => {
-    done();
+  testDb.query(truncateQuery, () => {
+    testDb.query(insertUserQuery, () => {
+      done();
+    });
   });
 });
 
