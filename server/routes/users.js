@@ -43,24 +43,15 @@ router.post("/", async (req, res, next) => {
 
   const userAlreadyExists = await usersService.userAlreadyExists(username);
 
-  console.log(userAlreadyExists);
-
   if (userAlreadyExists) {
     return next(createError(409, "Username is already taken"));
   }
 
-  // const emailUniqueQuery = `
-  //   SELECT * FROM users
-  //   WHERE user_email = ?
-  // `;
+  const emailAlreadyExists = await usersService.emailAlreadyExists(email);
 
-  // db.query(emailUniqueQuery, [email], (err, result) => {
-  //   if (err) throw err;
-
-  //   if (result.length !== 0) {
-  //     next(createError(409, "Email already taken"));
-  //   }
-  // });
+  if (emailAlreadyExists) {
+    return next(createError(409, "Email is already taken"));
+  }
 
   // // --- Validation passed, user can be registered --- //
 

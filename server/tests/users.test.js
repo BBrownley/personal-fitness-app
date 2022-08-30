@@ -11,7 +11,7 @@ beforeAll(done => {
 
   const insertUserQuery = `
       INSERT INTO users (user_id, user_username, user_email, user_hashed_password)
-      VALUES (null, "user14658458", "user1@email.com", 123456)
+      VALUES (null, "user14658458", "user1123515@email.com", 123456)
     `;
 
   testDb.query(truncateQuery, () => {
@@ -107,7 +107,14 @@ describe("POST /users", () => {
       .expect(409);
   });
 
-  test("should return a 409 error if email is taken", () => {});
+  test("should return a 409 error if email is taken", async () => {
+    const user = usersFixture.userAccsDuplicateEmail[0];
+
+    await request(app)
+      .post("/users")
+      .send(user)
+      .expect(409);
+  });
 
   test("should return status 200 with response containing a token if registration successful", () => {});
 });

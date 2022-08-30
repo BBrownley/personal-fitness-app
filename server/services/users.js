@@ -23,6 +23,27 @@ const userAlreadyExists = async username => {
   });
 };
 
+const emailAlreadyExists = async email => {
+  const emailUniqueQuery = `
+    SELECT * FROM users
+    WHERE user_email = ?
+  `;
+
+  return new Promise((resolve, reject) => {
+    db.query(emailUniqueQuery, [email], (err, result) => {
+      if (err) {
+        reject(err);
+      }
+
+      if (Number(result.length) !== 0) {
+        resolve(true);
+      }
+      resolve(false);
+    });
+  });
+};
+
 module.exports = {
-  userAlreadyExists
+  userAlreadyExists,
+  emailAlreadyExists
 };
