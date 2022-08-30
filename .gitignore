@@ -4,3 +4,4 @@ user-stories-description.txt
 restclient.rest
 node_modules
 server/.env
+journal.txt
