@@ -57,8 +57,6 @@ const registerUser = async (username, email, password) => {
 
   return new Promise((resolve, reject) => {
     db.query(insertUserQuery, [values], (err, result) => {
-      console.log(err);
-
       if (err) {
         reject();
       }
@@ -68,8 +66,34 @@ const registerUser = async (username, email, password) => {
   });
 };
 
+const findUser = async username => {
+  const findUserQuery = `
+    SELECT * FROM users
+    WHERE user_username = ?
+  `;
+
+  return new Promise((resolve, reject) => {
+    db.query(findUserQuery, [username], (err, result) => {
+      if (err) {
+        return reject(new Error("oh no"));
+      }
+
+      if (!result[0]) {
+        return resolve(null);
+      }
+
+      resolve({
+        userID: result[0].user_id,
+        username: result[0].user_username,
+        userPWHash: result[0].user_hashed_password
+      });
+    });
+  });
+};
+
 module.exports = {
   userAlreadyExists,
   emailAlreadyExists,
-  registerUser
+  registerUser,
+  findUser
 };

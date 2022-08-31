@@ -1,7 +1,11 @@
+require("dotenv").config();
+
 var express = require("express");
 var router = express.Router();
-const createError = require("http-errors");
 
+const createError = require("http-errors");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const usersService = require("../services/users");
 
 // Register a user
@@ -62,6 +66,41 @@ router.post("/", async (req, res, next) => {
   }
 
   res.status(200).json({ message: "User successfully registered" });
+});
+
+// Login a user
+
+router.post("/login", async (req, res, next) => {
+  const { username, password } = req.body;
+
+  try {
+    // Check if user exists with given username
+    const user = await usersService.findUser(username);
+
+    if (!user) {
+      return next(createError(400, "Invalid username or password"));
+    }
+
+    // Validate password
+    const pwCorrect = await bcrypt.compare(password, user.userPWHash);
+
+    if (!pwCorrect) {
+      return next(createError(400, "Invalid username or password"));
+    }
+
+    // User validation passes - sign and return jwt
+
+    const userToken = {
+      username: user.username,
+      id: user.userID
+    };
+
+    const token = jwt.sign(userToken, process.env.USER_TOKEN_SECRET);
+
+    res.status(200).json({ token: `Bearer ${token}`, username: user.username });
+  } catch (err) {
+    return next(createError(500, "Unable to login"));
+  }
 });
 
 module.exports = router;

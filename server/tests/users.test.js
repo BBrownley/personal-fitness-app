@@ -6,6 +6,8 @@ const testDb = require("../database/connection").testDb;
 
 const usersFixture = require("./fixtures/users");
 
+const bcrypt = require("bcrypt");
+
 beforeAll(done => {
   const truncateQuery = `TRUNCATE users`;
 
@@ -123,6 +125,53 @@ describe("POST /users", () => {
       .post("/users")
       .send(user)
       .expect(200);
+  });
+});
+
+describe("POST /users/login", () => {
+  test("should return a 400 error if username is invalid", async () => {
+    const userInvalidCredentials = {
+      username: "user400",
+      password: "123456"
+    };
+
+    await request(app)
+      .post("/users/login")
+      .send(userInvalidCredentials)
+      .expect(400);
+  });
+
+  test("should return a 400 error if password is invalid", async () => {
+    const userInvalidCredentials = {
+      username: "user200",
+      password: "234567"
+    };
+
+    await request(app)
+      .post("/users/login")
+      .send(userInvalidCredentials)
+      .expect(400);
+  });
+
+  test("should return status 200 with a token if login successful", async () => {
+    const userValidCredentials = {
+      username: "user200",
+      password: "123456"
+    };
+
+    const res = await request(app)
+      .post("/users/login")
+      .send(userValidCredentials)
+      .expect(200);
+
+    console.log(res.body);
+
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        token: expect.stringContaining("Bearer"),
+        username: expect.stringMatching("user200")
+      })
+    );
   });
 });
 
