@@ -1,78 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useLocation } from "react-router-dom";
 
-import usersService from "../../services/users";
+import { Container, UpperBkg, LowerBkg } from "./LoginRegisterStyles";
+
+import RegisterForm from "./RegisterForm";
+import LoginForm from "./LoginForm";
+
+/**
+ * Container for the login and register forms. This is the first page
+ * the user sees upon opening the application
+ */
 
 export default function LoginRegister() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [formErrorMsg, setFormErrorMsg] = useState("");
-
-  const handleUserRegistration = async e => {
-    e.preventDefault();
-
-    try {
-      const res = await usersService.register(
-        username,
-        email,
-        password,
-        confirmPassword
-      );
-      if (res.error) {
-        throw new Error(res.error);
-      }
-    } catch (e) {
-      setFormErrorMsg(e.message || "Unable to register");
-    }
-  };
-
-  useEffect(() => {
-    setFormErrorMsg("");
-  }, [username, email, password, confirmPassword]);
+  let location = useLocation();
 
   return (
-    <div className="register">
-      <form onSubmit={handleUserRegistration}>
-        <label>
-          Username:
-          <input
-            name="username"
-            type="text"
-            onChange={e => setUsername(e.target.value)}
-            value={username}
-          />
-        </label>
-        <label>
-          Email:
-          <input
-            name="email"
-            type="email"
-            onChange={e => setEmail(e.target.value)}
-            value={email}
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            name="password"
-            type="password"
-            onChange={e => setPassword(e.target.value)}
-            value={password}
-          />
-        </label>
-        <label>
-          Confirm Password:
-          <input
-            name="confirmPassword"
-            type="password"
-            onChange={e => setConfirmPassword(e.target.value)}
-            value={confirmPassword}
-          />
-        </label>
-        <input type="submit" value="Register"></input>
-      </form>
-      <div className="form-error">{formErrorMsg}</div>
-    </div>
+    <Container>
+      <UpperBkg></UpperBkg>
+      <LowerBkg />
+      {location.pathname === "/register" && <RegisterForm />}
+      {location.pathname === "/login" && <LoginForm />}
+    </Container>
   );
 }
